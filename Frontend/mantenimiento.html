@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Mantenimiento | InventarioEquiposTI</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<div class="app-shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>Mantenimiento</h1>
+        <small>InventarioEquiposTI • CRUD + PDF</small>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <a class="btn-fx" href="index.html">⟵ Atrás</a>
+      <button class="btn-fx btn-accent" onclick="exportarPDF()">
+        Exportar PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="glass card-pad">
+    <span class="badge-chip">Registro de Mantenimientos</span>
+    <hr>
+
+    <form id="frmMant" class="row g-2 mb-3">
+      <input type="hidden" name="id" id="id">
+
+      <div class="col-md-4">
+        <label class="form-label">Equipo</label>
+        <select name="id_equipo" id="equipo" class="form-select" required></select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Fecha</label>
+        <input type="date" name="fecha" class="form-control" required id="fecha">
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Tipo</label>
+        <input name="tipo" class="form-control" placeholder="Preventivo / Correctivo">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Descripción</label>
+        <input name="descripcion" class="form-control" placeholder="Detalle del mantenimiento">
+      </div>
+
+      <div class="col-md-1">
+        <label class="form-label">Costo</label>
+        <input name="costo" type="number" step="0.01" class="form-control" value="0">
+      </div>
+
+      <div class="col-md-12 d-grid mt-2">
+        <button class="btn-fx btn-accent">Guardar</button>
+      </div>
+    </form>
+
+    <!-- FILTRO FECHAS -->
+    <div class="row g-2 mb-3">
+      <div class="col-md-3">
+        <label class="form-label">Desde</label>
+        <input type="date" id="fDesde" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Hasta</label>
+        <input type="date" id="fHasta" class="form-control">
+      </div>
+      <div class="col-md-6 d-flex align-items-end gap-2">
+        <button type="button" class="btn-fx" onclick="filtrar()">Filtrar</button>
+        <button type="button" class="btn-fx" onclick="limpiarFiltro()">Limpiar</button>
+        <button type="button" class="btn-fx btn-accent" onclick="exportarPDF(true)">Exportar PDF (Filtro)</button>
+      </div>
+    </div>
+
+    <table class="table table-striped table-sm" id="tbl">
+      <thead>
+        <tr>
+          <th>Equipo</th><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Costo</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
+
+<script src="app.js"></script>
+<script>
+const form = document.getElementById("frmMant");
+const tbody = document.querySelector("#tbl tbody");
+const equipoSelect = document.getElementById("equipo");
+
+async function cargarEquipos() {
+  const equipos = await apiGet({controller:"mantenimiento", action:"equipos"});
+  equipoSelect.innerHTML = equipos.map(e =>
+    `<option value="${e.id}">${e.codigo} - ${e.nombre}</option>`
+  ).join("");
+}
+
+async function cargarMantenimientos() {
+  const datos = await apiGet({controller:"mantenimiento", action:"index"});
+  tbody.innerHTML = datos.map(m => `
+    <tr>
+      <td>${m.equipo}</td>
+      <td>${m.fecha}</td>
+      <td>${m.tipo ?? ""}</td>
+      <td>${m.descripcion ?? ""}</td>
+      <td>$${m.costo}</td>
+      <td>
+        <button class="btn btn-sm btn-primary" onclick='editar(${JSON.stringify(m)})'>Editar</button>
+        <button class="btn btn-sm btn-danger" onclick="eliminar(${m.id})">Eliminar</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function editar(m) {
+  form.id.value = m.id;
+  form.id_equipo.value = m.id_equipo;
+  document.getElementById("fecha").value = m.fecha;
+  form.tipo.value = m.tipo ?? "";
+  form.descripcion.value = m.descripcion ?? "";
+  form.costo.value = m.costo ?? 0;
+}
+
+async function eliminar(id) {
+  if (!confirm("¿Eliminar mantenimiento?")) return;
+  const fd = new FormData();
+  fd.append("id", id);
+
+  await fetch(API + "?controller=mantenimiento&action=delete", {
+    method: "POST",
+    body: fd
+  });
+
+  cargarMantenimientos();
+}
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  await apiPost({controller:"mantenimiento", action:"save"}, "#frmMant");
+  form.reset();
+  document.getElementById("id").value = "";
+  cargarMantenimientos();
+});
+
+function filtrar(){
+  // fecha está en columna 2 (index 1)
+  filterTableByDate({ tableSelector:"#tbl", dateColIndex: 1, fromId:"fDesde", toId:"fHasta" });
+}
+
+function limpiarFiltro(){
+  document.getElementById("fDesde").value = "";
+  document.getElementById("fHasta").value = "";
+  document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.style.display = "");
+}
+
+function exportarPDF(usandoFiltro = false){
+  const desde = document.getElementById("fDesde").value || "N/A";
+  const hasta = document.getElementById("fHasta").value || "N/A";
+
+  exportTableToPDF({
+    title: "Reporte de Mantenimientos",
+    subtitle: usandoFiltro ? `Periodo: ${desde} hasta ${hasta}` : "Historial de mantenimientos realizados",
+    tableSelector: "#tbl",
+    fileName: usandoFiltro ? "mantenimientos_filtrado.pdf" : "mantenimientos.pdf",
+    orientation: "l",
+    responsable: "Ing. Jhoe Cadena",
+    cargo: "Responsable de Sistemas",
+    empresa: "InventarioEquiposTI",
+    logoPath: "logo.png"
+  });
+}
+
+cargarEquipos();
+cargarMantenimientos();
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+:root{
+  --bg1:#05060a;
+  --bg2:#0a0f2a;
+  --card: rgba(255,255,255,.06);
+  --border: rgba(255,255,255,.14);
+  --txt: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.65);
+  --accent:#7c5cff;
+  --accent2:#00e5ff;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  min-height:100vh;
+  color:var(--txt);
+  background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,.25), transparent 60%),
+    radial-gradient(900px 500px at 90% 20%, rgba(0,229,255,.18), transparent 60%),
+    linear-gradient(135deg, var(--bg1), var(--bg2));
+}
+
+.app-shell{
+  max-width:1200px;
+  margin:0 auto;
+  padding:28px 18px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.brand .logo{
+  width:42px;height:42px;border-radius:14px;
+  background: linear-gradient(135deg, rgba(124,92,255,.9), rgba(0,229,255,.7));
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+.brand h1{
+  font-size:18px;
+  margin:0;
+  letter-spacing:.5px;
+}
+.brand small{ color:var(--muted); }
+
+.glass{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.35);
+}
+
+.card-pad{ padding:16px; }
+
+.btn-fx{
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color:var(--txt);
+  border-radius:14px;
+  padding:10px 12px;
+  transition:.18s ease;
+  text-decoration:none;
+  display:inline-block;
+}
+.btn-fx:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.26);
+  background: rgba(255,255,255,.09);
+  color:var(--txt);
+}
+.btn-accent{
+  border:0;
+  background: linear-gradient(135deg, rgba(124,92,255,1), rgba(0,229,255,.9));
+  color:#071016;
+  font-weight:800;
+}
+.btn-accent:hover{ filter: brightness(1.06); }
+
+.badge-chip{
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  color: var(--muted);
+  background: rgba(255,255,255,.05);
+}
+
+.form-control, .form-select{
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: var(--txt) !important;
+  border-radius: 14px !important;
+}
+.form-control::placeholder{ color: rgba(255,255,255,.5); }
+label{ color:var(--muted); font-size:.9rem; }
+hr{ border-color: rgba(255,255,255,.12); }
+
+/* ===== FIX TABLAS (BOOTSTRAP DARK + GLASS) ===== */
+.table{
+  --bs-table-bg: transparent !important;
+  --bs-table-color: var(--txt) !important;
+  --bs-table-striped-bg: rgba(255,255,255,.05) !important;
+  --bs-table-striped-color: var(--txt) !important;
+  --bs-table-hover-bg: rgba(124,92,255,.10) !important;
+  --bs-table-hover-color: var(--txt) !important;
+  --bs-table-border-color: rgba(255,255,255,.12) !important;
+  color: var(--txt) !important;
+  margin-bottom: 0;
+}
+
+.table thead th{
+  background: linear-gradient(135deg, rgba(124,92,255,.25), rgba(0,229,255,.18)) !important;
+  color: var(--txt) !important;
+  border-bottom: 1px solid rgba(255,255,255,.18) !important;
+}
+
+.table tbody tr{ background: rgba(255,255,255,.03) !important; }
+.table-striped > tbody > tr:nth-of-type(odd){ background: rgba(255,255,255,.06) !important; }
+
+.table td, .table th{
+  background: transparent !important;
+  color: var(--txt) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  vertical-align: middle;
+}
+
+/* Botones dentro tabla */
+.table .btn{ border-radius:12px; }
+.table .btn-primary{
+  background: rgba(124,92,255,.25) !important;
+  border: 1px solid rgba(124,92,255,.45) !important;
+}
+.table .btn-danger{
+  background: rgba(255,70,90,.18) !important;
+  border: 1px solid rgba(255,70,90,.35) !important;
+}
+.table .btn:hover{ filter: brightness(1.12); transform: translateY(-1px); }
+
+/* Cards menú */
+.menu-card{ border-radius: 18px; transition:.18s ease; }
+.menu-card:hover{ transform: translateY(-3px); border-color: rgba(255,255,255,.22); }
+
+.menu-ico{
+  width:56px; height:56px; border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px;
+  background: linear-gradient(135deg, rgba(124,92,255,.35), rgba(0,229,255,.25));
+  border:1px solid rgba(255,255,255,.14);
+}
+.menu-title{ font-weight:900; font-size:16px; color: var(--txt); }
+.menu-sub{ font-size:13px; color: var(--muted); margin-top:2px; }

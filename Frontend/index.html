@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>InventarioEquiposTI</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<div class="app-shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>InventarioEquiposTI</h1>
+        <small>Sistema de Control de Equipos de Cómputo</small>
+      </div>
+    </div>
+    <span class="badge-chip">Menú Principal</span>
+  </div>
+
+  <div class="glass card-pad mt-3">
+    <div class="mb-3">
+      <div class="fw-semibold" style="font-size:18px;">Módulos del Sistema</div>
+      <div style="color:var(--muted);">Selecciona un módulo para gestionar el inventario</div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-md-4">
+        <a href="equipos.html" class="menu-card glass card-pad d-block text-decoration-none h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="menu-ico">💻</div>
+            <div>
+              <div class="menu-title">Gestión de Equipos</div>
+              <div class="menu-sub">Registrar, editar y eliminar equipos</div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <span class="btn-fx btn-accent w-100 d-inline-block text-center py-2">Entrar</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <a href="departamentos.html" class="menu-card glass card-pad d-block text-decoration-none h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="menu-ico">🏢</div>
+            <div>
+              <div class="menu-title">Departamentos</div>
+              <div class="menu-sub">Administrar áreas de la empresa</div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <span class="btn-fx btn-accent w-100 d-inline-block text-center py-2">Entrar</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <a href="mantenimiento.html" class="menu-card glass card-pad d-block text-decoration-none h-100">
+          <div class="d-flex align-items-center gap-3">
+            <div class="menu-ico">🛠️</div>
+            <div>
+              <div class="menu-title">Mantenimiento</div>
+              <div class="menu-sub">Registrar mantenimientos y costos</div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <span class="btn-fx btn-accent w-100 d-inline-block text-center py-2">Entrar</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <hr class="my-4">
+    <div class="d-flex justify-content-between flex-wrap gap-2" style="color:var(--muted);">
+      <div>Proyecto académico • PHP • MySQL • MVC</div>
+      <div>© InventarioEquiposTI</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
