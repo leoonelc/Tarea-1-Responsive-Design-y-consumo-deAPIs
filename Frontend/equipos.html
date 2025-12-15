@@ -2,10 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Equipos | InventarioEquiposTI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equipos | SIGAT FLODECOL</title>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 <div class="app-shell">
 
@@ -14,67 +17,28 @@
       <div class="logo"></div>
       <div>
         <h1>Equipos</h1>
-        <small>InventarioEquiposTI • CRUD + PDF</small>
+        <small>SIGAT FLODECOL • Inventario • CRUD + PDF</small>
       </div>
     </div>
     <div class="d-flex gap-2">
       <a class="btn-fx" href="index.html">⟵ Atrás</a>
-      <button class="btn-fx btn-accent" onclick="exportarPDF()">
-        Exportar PDF
-      </button>
+      <button class="btn-fx btn-accent" type="button" onclick="exportarPDF(false)">Exportar PDF</button>
     </div>
   </div>
 
   <div class="glass card-pad">
-    <span class="badge-chip">Gestión de Equipos</span>
+
+    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+      <span class="badge-chip">Gestión de Equipos</span>
+
+      <button class="btn-fx btn-accent" type="button" onclick="nuevoEquipo()">
+        ➕ Registrar equipo
+      </button>
+    </div>
+
     <hr>
 
-    <form id="frmEquipo" class="row g-2 mb-3">
-      <input type="hidden" name="id" id="id">
-
-      <div class="col-md-2">
-        <label class="form-label">Código</label>
-        <input class="form-control" name="codigo" required placeholder="EQ-001">
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Nombre</label>
-        <input class="form-control" name="nombre" required placeholder="PC Administrativo">
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Marca</label>
-        <input class="form-control" name="marca" placeholder="HP">
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Modelo</label>
-        <input class="form-control" name="modelo" placeholder="ProDesk">
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Serie</label>
-        <input class="form-control" name="serie" placeholder="SER-0001">
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Departamento</label>
-        <select class="form-select" name="id_departamento" id="dep"></select>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Estado</label>
-        <select class="form-select" name="estado">
-          <option>Activo</option>
-          <option>Dado de baja</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Fecha compra</label>
-        <input type="date" class="form-control" name="fecha_compra" id="fecha_compra">
-      </div>
-
-      <div class="col-md-2 d-grid align-items-end">
-        <button class="btn-fx btn-accent mt-4">Guardar</button>
-      </div>
-    </form>
-
-    <!-- FILTRO FECHAS -->
+    <!-- FILTROS -->
     <div class="row g-2 mb-3">
       <div class="col-md-3">
         <label class="form-label">Desde</label>
@@ -84,111 +48,486 @@
         <label class="form-label">Hasta</label>
         <input type="date" id="fHasta" class="form-control">
       </div>
-      <div class="col-md-6 d-flex align-items-end gap-2">
+      <div class="col-md-3">
+        <label class="form-label">Departamento</label>
+        <select id="fDep" class="form-select">
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <div class="col-md-3 d-flex align-items-end gap-2">
         <button type="button" class="btn-fx" onclick="filtrar()">Filtrar</button>
         <button type="button" class="btn-fx" onclick="limpiarFiltro()">Limpiar</button>
-        <button type="button" class="btn-fx btn-accent" onclick="exportarPDF(true)">Exportar PDF (Filtro)</button>
+        <button type="button" class="btn-fx btn-accent" onclick="exportarPDF(true)">PDF (Filtro)</button>
       </div>
     </div>
 
-    <table class="table table-striped table-sm" id="tbl">
-      <thead>
-        <tr><th>Código</th><th>Nombre</th><th>Depto.</th><th>Estado</th><th>Fecha compra</th><th>Acciones</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+    <!-- ✅ CONTROLES: MOSTRAR 10/20/50 + PAGINACIÓN -->
+    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <label class="form-label mb-0">Mostrar</label>
+        <select id="rowsPerPage" class="form-select form-select-sm" style="width:90px;">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+        <span class="text-muted">registros</span>
+      </div>
 
+      <div id="pagination" class="pager"></div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="table-responsive">
+      <table class="table table-striped table-sm" id="tbl">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Depto</th>
+            <th>Tipo</th>
+            <th>Nombre PC</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Accesorios</th>
+            <th>Office</th>
+            <th>Kaspersky</th>
+            <th>Windows</th>
+            <th>Estado Equipo</th>
+            <th>Estado</th>
+            <th>Creado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+  </div>
 </div>
 
+<!-- MODAL DETALLES -->
+<div class="modal fade" id="mdlDetalles" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content glass" style="border-radius:18px;">
+      <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.12);">
+        <h5 class="modal-title">Detalles del equipo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="detBody" class="row g-2"></div>
+      </div>
+      <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.12);">
+        <button class="btn-fx" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REGISTRAR / EDITAR -->
+<div class="modal fade" id="mdlEquipo" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content glass" style="border-radius:18px;">
+
+      <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.12);">
+        <h5 class="modal-title" id="mdlEquipoTitle">Registrar equipo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="frmEquipoModal" class="row g-2">
+          <input type="hidden" name="id" id="idEquipo">
+
+          <div class="col-md-2">
+            <label class="form-label">Código</label>
+            <input class="form-control" name="codigo" id="codigo"
+                   required readonly
+                   placeholder="Se genera automáticamente">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" name="nombre" required placeholder="Computadora">
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Marca</label>
+            <input class="form-control" name="marca" placeholder="HP / DELL">
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Modelo</label>
+            <input class="form-control" name="modelo" placeholder="Inspiron / ProDesk">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Serie</label>
+            <input class="form-control" name="serie" placeholder="SER-0001">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Departamento</label>
+            <select class="form-select" name="id_departamento" id="dep"></select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Responsable</label>
+            <select class="form-select" name="responsable_id" id="resp"></select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Tipo dispositivo</label>
+            <select class="form-select" name="tipo_dispositivo_id" id="tipo"></select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Ubicación antigua</label>
+            <select class="form-select" name="ubicacion_antigua_id" id="ubiA"></select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Ubicación actual</label>
+            <select class="form-select" name="ubicacion_actual_id" id="ubiC"></select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Nombre PC / Dispositivo</label>
+            <input class="form-control" name="nombre_dispositivo" placeholder="DESKTOP-XXXX / BODEGA_OTON">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Accesorios</label>
+            <input class="form-control" name="accesorios" placeholder="NINGUNO / Mochila / Funda">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Estado equipo</label>
+            <input class="form-control" name="estado_equipo" placeholder="ACTUALIZADO / NUEVO -ACTUALIZADO">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Estado</label>
+            <select class="form-select" name="estado">
+              <option>Activo</option>
+              <option>Dado de baja</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Fecha compra</label>
+            <input type="date" class="form-control" name="fecha_compra" id="fecha_compra">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Licencia Office</label>
+            <input class="form-control" name="licencia_office" placeholder="Clave / LTSC 2021 / etc">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Licencia Kaspersky</label>
+            <input class="form-control" name="licencia_kaspersky" placeholder="Clave / Estado">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Licencia Windows</label>
+            <input class="form-control" name="licencia_windows" placeholder="Clave Windows">
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Comentarios</label>
+            <input class="form-control" name="comentarios" placeholder="Estable y fluido">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.12);">
+        <button class="btn-fx" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn-fx btn-accent" form="frmEquipoModal" type="submit">Guardar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- libs -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
 
+<!-- app.js -->
 <script src="app.js"></script>
+
 <script>
-const form = document.getElementById("frmEquipo");
-const tbody = document.querySelector("#tbl tbody");
-const depSelect = document.getElementById("dep");
+  const tbody = document.querySelector("#tbl tbody");
 
-async function cargarDeps() {
-  const deps = await apiGet({controller:"equipo", action:"deps"});
-  depSelect.innerHTML = deps.map(d => `<option value="${d.id}">${d.nombre}</option>`).join("");
-}
+  const formEquipo = document.getElementById("frmEquipoModal");
+  const idEquipo   = document.getElementById("idEquipo");
 
-async function cargarEquipos() {
-  const datos = await apiGet({controller:"equipo", action:"index"});
-  tbody.innerHTML = datos.map(e => `
-    <tr>
-      <td>${e.codigo}</td>
-      <td>${e.nombre}</td>
-      <td>${e.departamento ?? ""}</td>
-      <td>${e.estado ?? "Activo"}</td>
-      <td>${e.fecha_compra ?? ""}</td>
-      <td>
-        <button class="btn btn-sm btn-primary" onclick='editar(${JSON.stringify(e)})'>Editar</button>
-        <button class="btn btn-sm btn-danger" onclick="eliminar(${e.id})">Eliminar</button>
-      </td>
-    </tr>
-  `).join("");
-}
+  const codigoInput= document.getElementById("codigo");
 
-function editar(e) {
-  form.id.value = e.id;
-  form.codigo.value = e.codigo;
-  form.nombre.value = e.nombre;
-  form.marca.value = e.marca ?? "";
-  form.modelo.value = e.modelo ?? "";
-  form.serie.value = e.serie ?? "";
-  document.getElementById("fecha_compra").value = e.fecha_compra ?? "";
-  depSelect.value = e.id_departamento;
-  form.estado.value = e.estado ?? "Activo";
-}
+  const depSelect  = document.getElementById("dep");
+  const respSelect = document.getElementById("resp");
+  const tipoSelect = document.getElementById("tipo");
+  const ubiASelect = document.getElementById("ubiA");
+  const ubiCSelect = document.getElementById("ubiC");
 
-async function eliminar(id) {
-  if (!confirm("¿Eliminar equipo?")) return;
-  const fd = new FormData();
-  fd.append("id", id);
-  await fetch(API + "?controller=equipo&action=delete", {method:"POST", body:fd});
-  cargarEquipos();
-}
+  const fDep = document.getElementById("fDep");
 
-form.addEventListener("submit", async e => {
-  e.preventDefault();
-  await apiPost({controller:"equipo", action:"save"}, "#frmEquipo");
-  form.reset();
-  document.getElementById("id").value = "";
-  cargarEquipos();
-});
+  const modalDetalles = new bootstrap.Modal(document.getElementById("mdlDetalles"));
+  const detBody       = document.getElementById("detBody");
 
-function filtrar(){
-  // fecha_compra está en la columna 5 (index 4)
-  filterTableByDate({ tableSelector:"#tbl", dateColIndex: 4, fromId:"fDesde", toId:"fHasta" });
-}
+  const modalEquipo   = new bootstrap.Modal(document.getElementById("mdlEquipo"));
+  const mdlEquipoTitle= document.getElementById("mdlEquipoTitle");
 
-function limpiarFiltro(){
-  document.getElementById("fDesde").value = "";
-  document.getElementById("fHasta").value = "";
-  document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.style.display = "");
-}
+  // ✅ Controles paginación
+  const rowsPerPageSel = document.getElementById("rowsPerPage");
+  const paginationDiv  = document.getElementById("pagination");
+  let _allEquipos = [];
+  let _page = 1;
+  let _perPage = parseInt(rowsPerPageSel.value || "10", 10);
 
-function exportarPDF(usandoFiltro = false){
-  const desde = document.getElementById("fDesde").value || "N/A";
-  const hasta = document.getElementById("fHasta").value || "N/A";
-  exportTableToPDF({
-    title: "Reporte de Equipos",
-    subtitle: usandoFiltro ? `Periodo: ${desde} hasta ${hasta}` : "Listado general de equipos",
-    tableSelector: "#tbl",
-    fileName: usandoFiltro ? "equipos_filtrado.pdf" : "equipos.pdf",
-    orientation: "l",
-    responsable: "Ing. Jhoe Cadena",
-    cargo: "Responsable de Sistemas",
-    empresa: "InventarioEquiposTI",
-    logoPath: "logo.png"
+  function renderTableRows(rows){
+    tbody.innerHTML = rows.map(e => `
+      <tr>
+        <td>${e.codigo ?? ""}</td>
+        <td>${e.departamento ?? ""}</td>
+        <td>${e.tipo_dispositivo ?? ""}</td>
+        <td>${e.nombre_dispositivo ?? ""}</td>
+        <td>${e.marca ?? ""}</td>
+        <td>${e.modelo ?? ""}</td>
+        <td>${e.accesorios ?? ""}</td>
+        <td>${e.licencia_office ?? ""}</td>
+        <td>${e.licencia_kaspersky ?? ""}</td>
+        <td>${e.licencia_windows ?? ""}</td>
+        <td>${e.estado_equipo ?? ""}</td>
+        <td>${e.estado ?? ""}</td>
+        <td>${(e.created_at ?? "").slice(0,10)}</td>
+        <td class="d-flex gap-1 flex-wrap">
+          <button class="btn btn-sm btn-primary" onclick='verDetalles(${JSON.stringify(e)})'>Ver</button>
+          <button class="btn btn-sm btn-primary" onclick='editar(${JSON.stringify(e)})'>Editar</button>
+          <button class="btn btn-sm btn-danger" onclick="eliminar(${e.id})">Eliminar</button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  function renderPagination(totalPages){
+    paginationDiv.innerHTML = "";
+
+    const mk = (label, disabled, onClick, active=false) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "pager-btn" + (active ? " active" : "");
+      b.textContent = label;
+      b.disabled = disabled;
+      b.onclick = onClick;
+      return b;
+    };
+
+    paginationDiv.appendChild(
+      mk("«", _page === 1, () => { _page--; applyPagination(); })
+    );
+
+    const windowSize = 6;
+    let start = Math.max(1, _page - Math.floor(windowSize/2));
+    let end = Math.min(totalPages, start + windowSize - 1);
+    start = Math.max(1, end - windowSize + 1);
+
+    for(let i=start; i<=end; i++){
+      paginationDiv.appendChild(
+        mk(String(i), false, () => { _page = i; applyPagination(); }, i === _page)
+      );
+    }
+
+    paginationDiv.appendChild(
+      mk("»", _page === totalPages, () => { _page++; applyPagination(); })
+    );
+  }
+
+  function applyPagination(){
+    const total = _allEquipos.length;
+    const totalPages = Math.max(1, Math.ceil(total / _perPage));
+    if (_page > totalPages) _page = totalPages;
+
+    const start = (_page - 1) * _perPage;
+    const end = start + _perPage;
+
+    renderTableRows(_allEquipos.slice(start, end));
+    renderPagination(totalPages);
+  }
+
+  rowsPerPageSel.addEventListener("change", () => {
+    _perPage = parseInt(rowsPerPageSel.value, 10);
+    _page = 1;
+    applyPagination();
   });
-}
 
-cargarDeps();
-cargarEquipos();
+  async function cargarCombos() {
+    const deps = await apiGet({controller:"equipo", action:"deps"});
+    depSelect.innerHTML = deps.map(d => `<option value="${d.id}">${d.nombre}</option>`).join("");
+    fDep.innerHTML = `<option value="">Todos</option>` + deps.map(d => `<option value="${d.nombre}">${d.nombre}</option>`).join("");
+
+    const meta = await apiGet({controller:"equipo", action:"meta"});
+    respSelect.innerHTML = meta.responsables.map(r => `<option value="${r.id}">${r.nombre}</option>`).join("");
+    tipoSelect.innerHTML = meta.tipos.map(t => `<option value="${t.id}">${t.nombre}</option>`).join("");
+
+    const uOpts = meta.ubicaciones.map(u => `<option value="${u.id}">${u.nombre}</option>`).join("");
+    ubiASelect.innerHTML = uOpts;
+    ubiCSelect.innerHTML = uOpts;
+  }
+
+  async function cargarEquipos() {
+    const datos = await apiGet({ controller:"equipo", action:"index" });
+    _allEquipos = Array.isArray(datos) ? datos : (datos.data || []);
+    _page = 1;
+    applyPagination();
+  }
+
+  // ✅ pide el próximo código al backend, solo cuando es NUEVO
+  async function refrescarCodigoAuto(){
+    if (idEquipo.value) return; // si está editando, no recalcular
+
+    const depId = depSelect.value;
+    if (!depId) return;
+
+    try{
+      const r = await apiGet({ controller:"equipo", action:"nextcode", dep_id: depId });
+      if (r?.ok && r.codigo) codigoInput.value = r.codigo;
+    }catch(e){
+      console.error(e);
+    }
+  }
+
+  depSelect.addEventListener("change", refrescarCodigoAuto);
+
+  function verDetalles(e){
+    const fields = [
+      ["Código", e.codigo],
+      ["Nombre", e.nombre],
+      ["Departamento", e.departamento],
+      ["Responsable", e.responsable],
+      ["Ubicación antigua", e.ubicacion_antigua],
+      ["Ubicación actual", e.ubicacion_actual],
+      ["Tipo dispositivo", e.tipo_dispositivo],
+      ["Nombre dispositivo", e.nombre_dispositivo],
+      ["Accesorios", e.accesorios],
+      ["Estado equipo", e.estado_equipo],
+      ["Estado", e.estado],
+      ["Fecha compra", e.fecha_compra],
+      ["Licencia Office", e.licencia_office],
+      ["Licencia Kaspersky", e.licencia_kaspersky],
+      ["Licencia Windows", e.licencia_windows],
+      ["Comentarios", e.comentarios],
+      ["Creado", e.created_at]
+    ];
+
+    detBody.innerHTML = fields.map(([k,v]) => `
+      <div class="col-md-4">
+        <div class="glass card-pad">
+          <div style="color:var(--muted); font-size:13px;">${k}</div>
+          <div style="font-weight:800; word-break:break-word;">${(v ?? "").toString()}</div>
+        </div>
+      </div>
+    `).join("");
+
+    modalDetalles.show();
+  }
+
+  function nuevoEquipo(){
+    mdlEquipoTitle.textContent = "Registrar equipo";
+    formEquipo.reset();
+    idEquipo.value = "";
+    codigoInput.value = "";
+    modalEquipo.show();
+    setTimeout(refrescarCodigoAuto, 80);
+  }
+
+  function editar(e){
+    mdlEquipoTitle.textContent = "Editar equipo";
+    formEquipo.reset();
+
+    idEquipo.value = e.id ?? "";
+    codigoInput.value = e.codigo ?? "";
+
+    formEquipo.nombre.value = e.nombre ?? "";
+    formEquipo.marca.value = e.marca ?? "";
+    formEquipo.modelo.value = e.modelo ?? "";
+    formEquipo.serie.value = e.serie ?? "";
+
+    depSelect.value  = e.id_departamento ?? "";
+    respSelect.value = e.responsable_id ?? "";
+    tipoSelect.value = e.tipo_dispositivo_id ?? "";
+    ubiASelect.value = e.ubicacion_antigua_id ?? "";
+    ubiCSelect.value = e.ubicacion_actual_id ?? "";
+
+    formEquipo.nombre_dispositivo.value = e.nombre_dispositivo ?? "";
+    formEquipo.accesorios.value         = e.accesorios ?? "";
+    formEquipo.estado_equipo.value      = e.estado_equipo ?? "";
+    formEquipo.estado.value             = e.estado ?? "Activo";
+    document.getElementById("fecha_compra").value = e.fecha_compra ?? "";
+
+    formEquipo.licencia_office.value    = e.licencia_office ?? "";
+    formEquipo.licencia_kaspersky.value = e.licencia_kaspersky ?? "";
+    formEquipo.licencia_windows.value   = e.licencia_windows ?? "";
+    formEquipo.comentarios.value        = e.comentarios ?? "";
+
+    modalEquipo.show();
+  }
+
+  async function eliminar(id){
+    if(!confirm("¿Eliminar equipo?")) return;
+    const fd = new FormData();
+    fd.append("id", id);
+    await fetch(API + "?controller=equipo&action=delete", { method:"POST", body: fd });
+    await cargarEquipos();
+  }
+
+  formEquipo.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    await apiPost({controller:"equipo", action:"save"}, "#frmEquipoModal");
+    modalEquipo.hide();
+    await cargarEquipos();
+  });
+
+  function filtrar(){
+    filterTableByDate({ tableSelector:"#tbl", dateColIndex: 12, fromId:"fDesde", toId:"fHasta" });
+
+    const dep = (fDep.value || "").trim().toLowerCase();
+    document.querySelectorAll("#tbl tbody tr").forEach(tr => {
+      if (tr.style.display === "none") return;
+      if (!dep) return;
+
+      const deptoTxt = (tr.children[1]?.textContent || "").trim().toLowerCase();
+      tr.style.display = (deptoTxt === dep) ? "" : "none";
+    });
+  }
+
+  function limpiarFiltro(){
+    document.getElementById("fDesde").value = "";
+    document.getElementById("fHasta").value = "";
+    fDep.value = "";
+    document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.style.display = "");
+  }
+
+  function exportarPDF(usandoFiltro=false){
+    const desde = document.getElementById("fDesde").value || "N/A";
+    const hasta = document.getElementById("fHasta").value || "N/A";
+
+    exportTableToPDF({
+      title: "Reporte de Equipos",
+      subtitle: usandoFiltro ? `Periodo: ${desde} hasta ${hasta}` : "Listado general de equipos",
+      tableSelector: "#tbl",
+      fileName: usandoFiltro ? "equipos_filtrado.pdf" : "equipos.pdf",
+      orientation: "l",
+      responsable: "Ing. Jhoe Cadena",
+      cargo: "Responsable de Sistemas",
+      empresa: "SIGAT FLODECOL"
+    });
+  }
+
+  (async function init(){
+    await cargarCombos();
+    await cargarEquipos();
+  })();
 </script>
+
 </body>
 </html>

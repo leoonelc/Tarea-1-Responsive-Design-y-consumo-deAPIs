@@ -1,3 +1,6 @@
+/* =========================================================
+   VARIABLES
+   ========================================================= */
 :root{
   --bg1:#05060a;
   --bg2:#0a0f2a;
@@ -9,10 +12,14 @@
   --accent2:#00e5ff;
 }
 
+/* =========================================================
+   RESET BÁSICO
+   ========================================================= */
 *{ box-sizing:border-box; }
 
 body{
   min-height:100vh;
+  margin:0;
   color:var(--txt);
   background:
     radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,.25), transparent 60%),
@@ -20,6 +27,9 @@ body{
     linear-gradient(135deg, var(--bg1), var(--bg2));
 }
 
+/* =========================================================
+   LAYOUT
+   ========================================================= */
 .app-shell{
   max-width:1200px;
   margin:0 auto;
@@ -39,121 +49,330 @@ body{
   align-items:center;
   gap:10px;
 }
+
 .brand .logo{
-  width:42px;height:42px;border-radius:14px;
+  width:42px;
+  height:42px;
+  border-radius:14px;
   background: linear-gradient(135deg, rgba(124,92,255,.9), rgba(0,229,255,.7));
   box-shadow: 0 12px 30px rgba(0,0,0,.35);
 }
+
 .brand h1{
   font-size:18px;
   margin:0;
   letter-spacing:.5px;
 }
-.brand small{ color:var(--muted); }
 
+.brand small{
+  color:var(--muted);
+}
+
+/* =========================================================
+   GLASS
+   ========================================================= */
 .glass{
+  position: relative;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 18px;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 18px 40px rgba(0,0,0,.35);
+  overflow: hidden;
 }
 
-.card-pad{ padding:16px; }
+/* eliminar capas fantasma */
+.glass::before,
+.glass::after{
+  content:none !important;
+}
 
+.card-pad{
+  padding:16px;
+}
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
 .btn-fx{
   border:1px solid var(--border);
   background: rgba(255,255,255,.06);
   color:var(--txt);
   border-radius:14px;
-  padding:10px 12px;
+  padding:10px 14px;
   transition:.18s ease;
   text-decoration:none;
   display:inline-block;
 }
+
 .btn-fx:hover{
   transform: translateY(-1px);
   border-color: rgba(255,255,255,.26);
   background: rgba(255,255,255,.09);
   color:var(--txt);
 }
+
 .btn-accent{
   border:0;
-  background: linear-gradient(135deg, rgba(124,92,255,1), rgba(0,229,255,.9));
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   color:#071016;
   font-weight:800;
 }
-.btn-accent:hover{ filter: brightness(1.06); }
 
+.btn-accent:hover{
+  filter: brightness(1.06);
+}
+
+/* =========================================================
+   BADGE
+   ========================================================= */
 .badge-chip{
-  padding:7px 10px;
+  padding:7px 12px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,.14);
   color: var(--muted);
   background: rgba(255,255,255,.05);
 }
 
-.form-control, .form-select{
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+label{
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+.form-control,
+.form-select{
   background: rgba(255,255,255,.06) !important;
   border: 1px solid rgba(255,255,255,.14) !important;
   color: var(--txt) !important;
   border-radius: 14px !important;
 }
-.form-control::placeholder{ color: rgba(255,255,255,.5); }
-label{ color:var(--muted); font-size:.9rem; }
-hr{ border-color: rgba(255,255,255,.12); }
 
-/* ===== FIX TABLAS (BOOTSTRAP DARK + GLASS) ===== */
+.form-control::placeholder{
+  color: rgba(255,255,255,.5);
+}
+
+hr{
+  border-color: rgba(255,255,255,.12);
+}
+
+/* =========================================================
+   ✅ FIX SELECT NATIVO (CHROME) + "LISTA"
+   ========================================================= */
+/* Importante: en algunos CSS anteriores se estaba forzando option blanco/negro;
+   aquí lo dejamos estable para que SIEMPRE se vea como lista */
+select,
+.form-select{
+  appearance: auto !important;
+  -webkit-appearance: menulist !important;
+}
+
+/* El control como tal (cerrado) */
+select,
+.form-select{
+  background: #ffffff !important;
+  color: #111111 !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+}
+
+/* Al abrir la lista */
+select option,
+.form-select option{
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+/* Si está dentro de modal */
+.modal select,
+.modal .form-select{
+  background:#ffffff !important;
+  color:#111111 !important;
+}
+
+/* =========================================================
+   CHECK
+   ========================================================= */
+.chkPrograma{
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent2);
+}
+
+/* =========================================================
+   TABLAS (MEJOR CONTRASTE + GLASS)
+   ========================================================= */
 .table{
   --bs-table-bg: transparent !important;
-  --bs-table-color: var(--txt) !important;
-  --bs-table-striped-bg: rgba(255,255,255,.05) !important;
-  --bs-table-striped-color: var(--txt) !important;
-  --bs-table-hover-bg: rgba(124,92,255,.10) !important;
-  --bs-table-hover-color: var(--txt) !important;
+  --bs-table-color: #ffffff !important;
+  --bs-table-striped-bg: rgba(255,255,255,.06) !important;
+  --bs-table-hover-bg: rgba(96,165,250,.18) !important;
   --bs-table-border-color: rgba(255,255,255,.12) !important;
-  color: var(--txt) !important;
-  margin-bottom: 0;
+
+  color: #ffffff !important;
+  margin:0;
 }
 
 .table thead th{
-  background: linear-gradient(135deg, rgba(124,92,255,.25), rgba(0,229,255,.18)) !important;
-  color: var(--txt) !important;
+  background: linear-gradient(135deg, #2d2f55, #1f2937) !important;
+  color: #ffffff !important;
+  font-weight: 800;
   border-bottom: 1px solid rgba(255,255,255,.18) !important;
+  user-select:none;
+  cursor:pointer;              /* ✅ para ordenar */
+  white-space:nowrap;
 }
 
-.table tbody tr{ background: rgba(255,255,255,.03) !important; }
-.table-striped > tbody > tr:nth-of-type(odd){ background: rgba(255,255,255,.06) !important; }
+.table tbody tr{
+  background: rgba(255,255,255,.04) !important;
+}
 
-.table td, .table th{
+.table tbody tr:nth-child(even){
+  background: rgba(255,255,255,.08) !important;
+}
+
+.table td,
+.table th{
   background: transparent !important;
-  color: var(--txt) !important;
   border-color: rgba(255,255,255,.12) !important;
   vertical-align: middle;
+  color:#ffffff !important;    /* ✅ fuerza blanco siempre */
 }
 
-/* Botones dentro tabla */
-.table .btn{ border-radius:12px; }
+/* =========================================================
+   ✅ INDICADOR ORDEN (▲ ▼)
+   ========================================================= */
+.th-sort{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.th-sort .sort-ico{
+  font-size:12px;
+  opacity:.9;
+}
+
+/* =========================================================
+   TABLA RESPONSIVE + SCROLL BONITO
+   ========================================================= */
+.table-responsive{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border-radius:16px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #6366f1 transparent;
+}
+
+.table-responsive::-webkit-scrollbar{
+  height: 8px;
+}
+.table-responsive::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, #6366f1, #22d3ee);
+  border-radius: 10px;
+}
+.table-responsive::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+/* Tu tabla */
+#tbl{
+  width:100%;
+  min-width:1200px;
+}
+
+/* Acciones */
+#tbl td:last-child{
+  white-space: nowrap;
+}
+.td-actions{
+  white-space: nowrap;
+}
+
+/* =========================================================
+   BOTONES EN TABLA
+   ========================================================= */
+.table .btn{
+  border-radius:12px;
+}
+
 .table .btn-primary{
   background: rgba(124,92,255,.25) !important;
   border: 1px solid rgba(124,92,255,.45) !important;
+  color:#fff !important;
 }
+
 .table .btn-danger{
   background: rgba(255,70,90,.18) !important;
   border: 1px solid rgba(255,70,90,.35) !important;
+  color:#fff !important;
 }
-.table .btn:hover{ filter: brightness(1.12); transform: translateY(-1px); }
 
-/* Cards menú */
-.menu-card{ border-radius: 18px; transition:.18s ease; }
-.menu-card:hover{ transform: translateY(-3px); border-color: rgba(255,255,255,.22); }
-
-.menu-ico{
-  width:56px; height:56px; border-radius:16px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:26px;
-  background: linear-gradient(135deg, rgba(124,92,255,.35), rgba(0,229,255,.25));
-  border:1px solid rgba(255,255,255,.14);
+.table .btn:hover{
+  filter: brightness(1.12);
+  transform: translateY(-1px);
 }
-.menu-title{ font-weight:900; font-size:16px; color: var(--txt); }
-.menu-sub{ font-size:13px; color: var(--muted); margin-top:2px; }
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+.modal-content.glass{
+  background: rgba(10,15,42,.72) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.modal-header,
+.modal-footer{
+  background: transparent !important;
+}
+
+.modal-title{
+  color: var(--txt);
+}
+
+.btn-close-white{
+  filter: invert(1);
+}
+
+/* =========================================================
+   ✅ PAGINACIÓN (botones bonitos)
+   ========================================================= */
+.pager{
+  display:flex;
+  gap:6px;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+
+.pager-btn{
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  border-radius: 12px;
+  padding: 6px 10px;
+  min-width: 36px;
+  transition: .15s ease;
+}
+
+.pager-btn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.10);
+}
+
+.pager-btn.active{
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #071016;
+  font-weight: 900;
+}
+
+.pager-btn:disabled{
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+}

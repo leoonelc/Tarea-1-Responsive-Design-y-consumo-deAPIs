@@ -1,0 +1,106 @@
+.shell{
+  min-height: 100vh;
+  padding: 18px;
+  background: radial-gradient(1200px 600px at 20% 0%, #2a2a55 0%, #0b1020 55%, #070a12 100%);
+  color: #eaf0ff;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(10px);
+  margin-bottom: 14px;
+}
+
+.brand{ display:flex; gap:12px; align-items:center; }
+.logo{
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #57a7ff, #8a5bff);
+  box-shadow: 0 10px 25px rgba(122,90,255,.25);
+}
+h1{ margin:0; font-size: 22px; }
+small{ opacity: .85; }
+
+.card{
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: #eaf0ff;
+}
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 12px;
+  padding: 12px 12px 0 12px;
+}
+
+.left,.right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.label{ opacity: .9; }
+
+.mini{ width: 110px; }
+.search{ width: 260px; }
+.date{ width: 170px; }
+
+.table-wrap{ padding: 12px; }
+
+.tbl{
+  width:100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.td-actions{
+  display:flex;
+  gap: 8px;
+}
+.btn-ico{ background: rgba(87,167,255,.20); }
+.btn-ico.danger{ background: rgba(255,87,87,.22); }
+
+.loading,.error{
+  padding: 14px 12px;
+}
+.error{ color: #ffb6b6; }
+
+/* Material fields oscuro */
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper{ display:none; }
+:host ::ng-deep .mdc-text-field--outlined{
+  background: rgba(0,0,0,0.15);
+  border-radius: 14px;
+}
+:host ::ng-deep .mdc-notched-outline__leading,
+:host ::ng-deep .mdc-notched-outline__notch,
+:host ::ng-deep .mdc-notched-outline__trailing{
+  border-color: rgba(255,255,255,0.18) !important;
+}
+:host ::ng-deep .mat-mdc-input-element,
+:host ::ng-deep .mat-mdc-select-value,
+:host ::ng-deep .mat-mdc-select-arrow{
+  color: #eaf0ff !important;
+}
+:host ::ng-deep .mat-mdc-form-field-label{
+  color: rgba(234,240,255,0.75) !important;
+}
+
+/* tabla: encabezado oscuro y texto blanco */
+:host ::ng-deep .mat-mdc-header-row{
+  background: rgba(255,255,255,0.08);
+}
+:host ::ng-deep .mat-mdc-header-cell,
+:host ::ng-deep .mat-mdc-cell{
+  color: #eaf0ff !important;
+  border-bottom-color: rgba(255,255,255,0.08) !important;
+}
+
+/* paginator oscuro */
+:host ::ng-deep .mat-mdc-paginator{
+  background: transparent !important;
+  color: #eaf0ff !important;
+}

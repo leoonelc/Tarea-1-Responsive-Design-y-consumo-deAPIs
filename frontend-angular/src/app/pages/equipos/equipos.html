@@ -1,0 +1,48 @@
+<h2>Equipos</h2>
+
+<button (click)="nuevo()">➕ Nuevo Equipo</button>
+
+<div *ngIf="cargando">Cargando...</div>
+
+<table *ngIf="!cargando && equipos.length">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Código</th>
+      <th>Nombre</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let e of equipos">
+      <td>{{ e.id }}</td>
+      <td>{{ e.codigo }}</td>
+      <td>{{ e.nombre_dispositivo }}</td>
+      <td>{{ e.estado }}</td>
+      <td>
+        <button (click)="editar(e)">✏️</button>
+        <button (click)="eliminar(e.id)">🗑️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!cargando && !equipos.length">No hay equipos</p>
+
+<!-- MODAL -->
+<div class="modal" *ngIf="modalAbierto">
+  <div class="modal-box">
+    <h3>{{ modoEditar ? 'Editar' : 'Nuevo' }} Equipo</h3>
+
+    <label>Código</label>
+    <input [(ngModel)]="form.codigo">
+
+    <label>Nombre</label>
+    <input [(ngModel)]="form.nombre_dispositivo">
+
+    <label>Estado</label>
+    <select [(ngModel)]="form.estado">
+      <option>Activo</option>
+      <option>Inactivo</option>
+    </select>
